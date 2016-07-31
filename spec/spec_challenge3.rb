@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'xor_breaker'
 
 describe XorBreaker, 'Challenge 3' do

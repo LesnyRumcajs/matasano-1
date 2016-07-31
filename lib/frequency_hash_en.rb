@@ -1,3 +1,4 @@
+# encoding: UTF-8
 CHARACTER_FREQUENCY = {
 ' ' => 18.74,
 'E' => 9.60,
