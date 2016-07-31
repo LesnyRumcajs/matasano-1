@@ -10,10 +10,10 @@ describe XorBreaker, 'Challenge 3' do
 
 	describe ".break" do
 		context "given correct ciphertext" do
-			it "should produce 256 candidates" do
+			it "should produce correct number of candidates" do
 				breaker = XorBreaker.new(@ciphertext)
 				results = breaker.break
-				expect(results.length).to equal 256
+				expect(results.length).to eq 6
 			end
 		end
 	end

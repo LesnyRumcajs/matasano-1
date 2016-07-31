@@ -12,7 +12,7 @@ class XorBreaker
 	end
 
 	def break
-		evaluateCandidates
+		evaluateCandidates getPrintableCandidates
 	end
 
 	def getMostLikelyPlaintext
@@ -23,8 +23,6 @@ class XorBreaker
 		@ranking.key @ranking.values.max
 	end
 
-	private
-
 	def generateCandidates
 		(0..255).to_a.each do |item|
 			key = ("%02X" % item)*(@ciphertext.length/2)
@@ -33,14 +31,11 @@ class XorBreaker
 	end
 
 	def getPrintableCandidates
-		@candidates.each do |key, value|
-			candidate = [value].pack('H*')
-			candidate unless candidate =~ /[^[:print:]]/
-		end
+		@candidates.delete_if {|k,v| [v].pack('H*') =~ /[^[:print:]]/}
 	end
 
-	def evaluateCandidates
-		@candidates.each do |key, value|
+	def evaluateCandidates (candidates)
+		candidates.each do |key, value|
 			[value].pack('H*').split("").each do |letter|
 				@ranking[value] += CHARACTER_FREQUENCY[letter] if CHARACTER_FREQUENCY[letter]
 			end
