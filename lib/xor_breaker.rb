@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 require 'math_tools'
 require 'frequency_hash_en'
 
@@ -42,7 +43,9 @@ class XorBreaker
 	end
 
 	def getPrintableCandidates
-		@candidates.delete_if {|k,v| [v].pack('H*') =~ /[^[:print:]x0A]/}
+		@candidates.delete_if do |k,v|
+			[v].pack('H*') =~ /[\x00-\x09\x0B-\x1F\x7F]/
+		end
 	end
 
 	def evaluateCandidates (candidates)
@@ -70,6 +73,8 @@ class FileXorBreaker
 				@plaintexts[breaker.getMostLikelyHexPlaintext] = breaker.getBestScore
 			end
 		end
+
+		@plaintexts.delete_if {|k,v| k.nil? or v.nil?}
 	end
 
 	def printResults
@@ -88,12 +93,3 @@ class FileXorBreaker
 		@plaintexts.key(@plaintexts.values.max)
 	end
 end
-
-# br = XorBreaker.new("467a773263677b71793270607d657c32747d6a3278677f6261327d64776032667a77327e73686b32767d753c")
-# br.break
-# p br.getMostLikelyPlaintext
-
-# br = FileXorBreaker.new("../spec/xor_ciphertext_good.txt")
-# br.break (:all)
-# # br.printHexResults
-# p br.getMostLikelyPlaintext

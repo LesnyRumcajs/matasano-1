@@ -1,11 +1,11 @@
 # encoding: UTF-8
 require 'xor_breaker'
 
-describe FileXorBreaker, 'Challenge 5' do
+describe FileXorBreaker, 'Challenge 4' do
 	before do
 		@ciphertext_file 		=  "spec/xor_ciphertext_good.txt"
-		@plaintext 				= "The quick brown fox jumps over the lazy dog."
-		@hexPlaintext 			= "54686520717569636b2062726f776e20666f78206a756d7073206f76657220746865206c617a7920646f672e"
+		@plaintext 				= "Now that the party is jumping\n"
+		@hexPlaintext 			= "4e6f77207468617420746865207061727479206973206a756d70696e670a"
 
 	end
 
@@ -13,14 +13,14 @@ describe FileXorBreaker, 'Challenge 5' do
 		context "given correct ciphertexts file" do
 			it 'should correctly compute the plaintext' do
 				breaker = FileXorBreaker.new(@ciphertext_file)
-				breaker.break (:all)
+				breaker.break (:printable)
 				result = breaker.getMostLikelyPlaintext
 				expect(result).to eq @plaintext
 			end
 
 			it 'should correctly compute the hex plaintext' do
 				breaker = FileXorBreaker.new(@ciphertext_file)
-				breaker.break (:all)
+				breaker.break (:printable)
 				result = breaker.getMostLikelyHexPlaintext
 				expect(result).to eq @hexPlaintext
 			end			
