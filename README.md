@@ -10,3 +10,13 @@ https://cryptopals.com
 - [x] Break repeating-key XOR
 - [x] AES in ECB mode
 - [x] Detect AES in ECB mode
+
+**Set 2**
+- [ ] Implement PKCS#7 padding
+- [ ] Implement CBC mode
+- [ ] An ECB/CBC detection oracle
+- [ ] Byte-at-a-time ECB decryption (Simple)
+- [ ] ECB cut-and-paste
+- [ ] Byte-at-a-time ECB decryption (Harder)
+- [ ] PKCS#7 padding validation
+- [ ] CBC bitflipping attacks
