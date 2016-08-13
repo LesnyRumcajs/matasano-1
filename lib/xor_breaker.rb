@@ -31,10 +31,29 @@ class XorBreaker
 		@ranking.key @ranking.values.max
 	end
 
+	def getMostLikelyHexKey
+		@candidates.key getMostLikelyHexPlaintext
+	end
+
+	def getnbestHexKeys(n)
+		result = Array.new
+		@ranking.sort_by{|k,v| v}.last(n).each do |k,v|
+			p k
+			p v
+			p @ranking.key(v)
+			result += [@candidates.key(v)]
+		end
+		p result
+		result
+	end
+
 	def getBestScore
 		@ranking.values.max
 	end
 
+	def printRanking
+		@ranking.each {|k,v| puts "key: #{[@candidates.key(k)[0,2]].pack('H*')}, val: #{v}" if v > 0}
+	end
 	def generateCandidates
 		(0..255).to_a.each do |item|
 			key = ("%02X" % item)*(@ciphertext.length/2)
@@ -44,15 +63,16 @@ class XorBreaker
 
 	def getPrintableCandidates
 		@candidates.delete_if do |k,v|
-			[v].pack('H*') =~ /[\x00-\x09\x0B-\x1F\x7F]/
+			[v].pack('H*') =~ /[\x01-\x08\x0E-\x1F]/
 		end
 	end
 
 	def evaluateCandidates (candidates)
 		candidates.each do |key, value|
-			[value].pack('H*').split("").each do |letter|
-				@ranking[value] += CHARACTER_FREQUENCY[letter] if CHARACTER_FREQUENCY[letter]
-			end
+			@ranking[value] = [value].pack('H*').scan(/[ETAOIN SHRDCMLU]/i).size
+			# [value].pack('H*').split("").each do |letter|
+				# @ranking[value] += CHARACTER_FREQUENCY[letter] if CHARACTER_FREQUENCY[letter]
+			# end
 		end
 	end
 end
