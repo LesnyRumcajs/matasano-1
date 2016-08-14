@@ -1,5 +1,6 @@
 require 'openssl'
 require 'tools_string'
+require 'padding'
 
 module AESCipher
 	module_function
@@ -57,5 +58,24 @@ module AESCipher
 		end
 
 		plaintext		
+	end
+
+	def generateKey
+		Random.new.bytes(16)
+	end
+
+	def encryption_oracle(plaintext)
+		key = generateKey
+
+		randombytes = Proc.new {Random.new.bytes(Random.new.rand(5..10))}
+		plaintext = (randombytes.call + plaintext + randombytes.call)
+		plaintext = Padding.addPKCS7(plaintext, 16)
+
+		if Random.new.rand(0..1) == 0
+			return encryptECB(plaintext, key, padding: false), 'ECB'
+		else
+			iv = generateKey
+			return encryptCBC(plaintext, key, iv, padding: false), 'CBC'
+		end
 	end
 end

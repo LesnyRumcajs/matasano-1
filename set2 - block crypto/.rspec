@@ -2,3 +2,4 @@
 --require spec_helper
 --require spec_challenge9
 --require spec_challenge10
+--require spec_challenge11
